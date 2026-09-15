@@ -1,0 +1,3 @@
+interface:
+  display_name: "Qoder Cloud Agents Global"
+  short_description: "Run Qoder cloud workflows through MCP or HTTP."

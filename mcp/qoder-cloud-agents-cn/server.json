@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.QoderAI/qoder-cloud-agents-cn",
+  "title": "Qoder Cloud Agents CN",
+  "description": "Create and manage Qoder cloud agents, run sessions, and retrieve results in the CN region.",
+  "version": "0.6.0",
+  "websiteUrl": "https://github.com/QoderAI/cloud-agents/blob/main/mcp/README.md",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.qoder.cn/api/v1/mcp/servers/qca",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Authenticate with your CN Qoder Personal Access Token.",
+          "value": "Bearer {pat}",
+          "isRequired": true,
+          "isSecret": true,
+          "variables": {
+            "pat": {
+              "description": "Your CN Qoder PAT from https://qoder.com.cn/cloud/pat-keys. Enter the raw token without the Bearer prefix.",
+              "format": "string",
+              "isRequired": true,
+              "isSecret": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
