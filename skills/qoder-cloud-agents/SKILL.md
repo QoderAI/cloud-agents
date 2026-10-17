@@ -1,6 +1,6 @@
 ---
 name: qoder-cloud-agents
-description: Run and manage Qoder Cloud Agents Global tasks, conversations and schedules from third-party agents. Use available QCA MCP tools or the HTTP API.
+description: Use Qoder Cloud Agents to create and configure cloud agents, run tasks, continue conversations, and automate work on a schedule. Manage environments and resources, and track progress and results.
 ---
 
 # Qoder Cloud Agents
@@ -11,6 +11,22 @@ description: Run and manage Qoder Cloud Agents Global tasks, conversations and s
 - If MCP is absent or unconfigured, or the user requests HTTP, follow [HTTP setup and workflows](shared/guide.md). Connected MCP errors and uncertain writes do not trigger automatic HTTP retries.
 - Use this edition's [regional endpoints](references/region.md). Keep the selected account, environment and resource region consistent.
 - For MCP credential setup, read [MCP authentication](references/mcp-auth.md). HTTP uses separately configured local PAT/SAT credentials; a plugin PAT form does not automatically supply them. Never ask for tokens in chat.
+
+## Select a personal or enterprise workspace
+
+Managed/CAS MCP tools can operate in personal spaces and enterprise spaces the signed-in user is authorized to access. Before selecting a space, check the live schemas for `list_accessible_workspaces` and workspace parameters; older installations may not expose them. If enterprise selection is unavailable, report that limitation instead of silently operating in the personal space.
+
+Call `list_accessible_workspaces` with `{}` when discovering or changing the target space. Its `items` contain `workspace_id`, `name`, `type`, `organization_id` (enterprise only), `can_write`, and `is_default`. CAS discovers spaces from the authenticated user; no organization argument is needed. Results include the personal space and ordinary enterprise spaces available to organization administrators; non-administrators receive only their personal space. Enterprise listing initializes a default enterprise space when needed. Internal business spaces are excluded. Reuse returned IDs; do not infer an organization ID from a workspace ID.
+
+| Target | Managed/CAS tool arguments | Forward tool arguments |
+| --- | --- | --- |
+| Default personal space | Omit `workspace_id` | Use existing arguments; no workspace selector |
+| Selected personal space | Pass its `workspace_id` | Only default personal access is supported |
+| Enterprise space | Pass its `workspace_id`; no `organization_id` needed | Not supported; do not call Forward tools for enterprise operations |
+
+Managed/CAS selection is per call, not a persistent switch. Forward tools do not accept `workspace_id` or `organization_id` and remain in the personal space. Keep the same target on subsequent resource discovery, creation, updates and status/event polling. Honor the user's selected space; ask which one when the target is ambiguous. For writes, check `can_write`; the backend still authorizes each operation and can reject stale permissions. Do not retry a denied enterprise operation in the personal space.
+
+These are MCP argument fields, not credentials or HTTP business-body fields. See [MCP calling guide](references/mcp-guide.md#workspace-argument-examples) for examples.
 
 ## Choose the workflow
 

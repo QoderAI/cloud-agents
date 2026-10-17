@@ -1,8 +1,14 @@
 # Managed and shared core tools
 
-Core resource and execution tools only. Read the live schema before calling; required and optional top-level arguments remain unchanged. Nested configuration guidance is in [Managed workflows](workflows.md) and [Forward workflows](forward-workflows.md).
+Core resource and execution tools only. Read the live schema before calling; the tables below list business arguments, while workspace selection is described separately below. Nested configuration guidance is in [Managed workflows](workflows.md) and [Forward workflows](forward-workflows.md).
 
 R = read-only; W = mutation; D = delete/detach (inspect its scope). Managed lists return top-level `items`; Forward lists normally return `item.data`. Forward detail tools use their declared resource-specific IDs: `template_id`, `session_id`, `schedule_id`, or `environment_id`; check each live schema.
+
+## Workspace selection
+
+Call `list_accessible_workspaces` with `{}` to discover available personal and enterprise spaces. It accepts no user, organization or workspace selector and returns `items`; internal business spaces are excluded. Listing can initialize a default space when needed.
+
+Managed/CAS tools additionally accept optional top-level `workspace_id` when exposed by the live schema. This common parameter is omitted from the business-argument tables below. Omit it for default personal access, or reuse a returned ID on every call for the selected space. No `organization_id` argument is needed. Forward tools accept neither selector and remain personal-only. See [workspace argument examples](mcp-guide.md#workspace-argument-examples).
 
 ## Models and Agents
 

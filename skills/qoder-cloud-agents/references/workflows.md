@@ -6,6 +6,12 @@ These examples show logical Tool names and argument objects. The MCP host may pr
 
 Use Managed for explicit Agent/Environment execution without a business Identity, and Deployment for standalone recurring jobs. Use [Forward workflows](forward-workflows.md) for an existing business Identity and Template or a Forward-owned Session/Schedule. Do not cross layers on permission or reference failures.
 
+## Select the workspace before running a workflow
+
+For a requested enterprise space or an ambiguous target, call `list_accessible_workspaces({})` and select an authorized returned space. Check `can_write` before mutations. Add its `workspace_id` at the top level of every Managed tool call, including resource discovery, creation, message submission, status/event polling and Deployment operations. Keep all resource IDs in the selected space; do not reuse personal resources for an enterprise task without checking availability there.
+
+The examples below omit `workspace_id` and therefore use default personal access. For an enterprise workflow, add the selected ID to each example's argument object; no `organization_id` is required. Follow the live schema and stop if the installed tools do not support selection. A denied or unavailable enterprise space must not trigger a retry in personal space.
+
 ## Create an Agent and complete one turn
 
 ### 1. Select a model

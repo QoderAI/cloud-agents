@@ -4,6 +4,22 @@ Read the workflow selected in [the Skill entrypoint](../SKILL.md), then use this
 
 Use the installed connector's typed tools. Match logical names such as `list_models`, `create_session` and `create_forward_session` to the host's discovered callable names; do not guess a namespace. Verify needed tools and their live schemas before planning or calling. Pass the argument object defined by each tool's schema.
 
+## Workspace argument examples
+
+Discover spaces with `list_accessible_workspaces({})`, then use the returned IDs. For a Managed/CAS enterprise call:
+
+```json
+{"name":"list_sessions","arguments":{"workspace_id":"ws_example"}}
+```
+
+Forward tools currently support only default personal access:
+
+```json
+{"name":"list_forward_sessions","arguments":{}}
+```
+
+For Managed/CAS default personal access, omit `workspace_id`. For Managed/CAS enterprise access, pass only `workspace_id`; CAS resolves the organization and authorizes access. Forward tools accept neither `workspace_id` nor `organization_id`. Do not use Forward tools for enterprise-space requests or silently fall back to personal access. The business `identity_id` required by some tools is still a separate argument. Keep any other required arguments from the live schema. Workspace discovery lists ordinary spaces only, excluding internal business spaces.
+
 ## Core scope and retained configuration
 
 This tool set focuses on core resource lifecycle and execution. File, Skill and Vault list/get tools support discovery of existing resources; file attachments remain available.
